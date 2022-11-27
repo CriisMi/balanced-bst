@@ -71,7 +71,20 @@ const Tree = (arr) => {
     return node;
   };
 
-  return { root, insertNode, deleteNode, findNode };
+  const height = (node = root) => {
+    if (root === null) {
+      return null;
+    }
+    return (
+      1 +
+      Math.max(
+        node.left !== null ? height(node.left) : -1,
+        node.right !== null ? height(node.right) : -1
+      )
+    );
+  };
+
+  return { root, insertNode, deleteNode, findNode, height };
 };
 
 function buildTree(arr, start, end) {
@@ -134,3 +147,6 @@ prettyPrint(anaTree.root);
 anaTree.deleteNode(6);
 prettyPrint(anaTree.root);
 prettyPrint(anaTree.findNode(2));
+anaTree.insertNode(22);
+prettyPrint(anaTree.root);
+console.log(anaTree.height());
