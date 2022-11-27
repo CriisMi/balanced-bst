@@ -59,7 +59,19 @@ const Tree = (arr) => {
     }
     return minv;
   }
-  return { root, insertNode, deleteNode };
+
+  const findNode = (num, node = root) => {
+    if (num < node.data) {
+      node = node.left;
+      findNode(num, node);
+    } else if (num > node.data) {
+      node = node.right;
+      findNode(num, node);
+    }
+    return node;
+  };
+
+  return { root, insertNode, deleteNode, findNode };
 };
 
 function buildTree(arr, start, end) {
@@ -116,9 +128,9 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 let ana = mergeSort([8, 43, 2, 6, 8, 34, 1, 8, 11, 6]);
 console.log(ana);
 let anaTree = Tree(ana);
-console.log(prettyPrint(anaTree.root));
+prettyPrint(anaTree.root);
 anaTree.insertNode(5);
-console.log(prettyPrint(anaTree.root));
-anaTree.deleteNode(34);
-
-console.log(prettyPrint(anaTree.root));
+prettyPrint(anaTree.root);
+anaTree.deleteNode(6);
+prettyPrint(anaTree.root);
+prettyPrint(anaTree.findNode(2));
