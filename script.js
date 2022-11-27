@@ -9,7 +9,7 @@ const Node = (data, left = null, right = null) => {
 const Tree = (arr) => {
   let root = buildTree(arr, 0, arr.length - 1);
 
-  const insert = (num, node = root) => {
+  const insertNode = (num, node = root) => {
     if (node.data === num) {
       console.log("Value already exists");
       return;
@@ -24,12 +24,42 @@ const Tree = (arr) => {
       return;
     }
     if (num < node.data) {
-      return insert(num, node.left);
+      return insertNode(num, node.left);
     } else {
-      return insert(num, node.right);
+      return insertNode(num, node.right);
     }
   };
-  return { root, insert };
+
+  const deleteNode = (num, node = root) => {
+    if (node === null) {
+      return node;
+    }
+
+    if (num < node.data) {
+      node.left = deleteNode(num, node.left);
+    } else if (num > node.data) {
+      node.right = deleteNode(num, node.right);
+    } else {
+      if (node.left === null) {
+        return node.right;
+      } else if (node.right === null) {
+        return node.left;
+      }
+      node.data = minValue(node.right);
+      node.right = deleteNode(node.data, node.right);
+    }
+    return node;
+  };
+
+  function minValue(node) {
+    let minv = node.data;
+    while (node.left != null) {
+      minv = node.left.data;
+      node = node.left;
+    }
+    return minv;
+  }
+  return { root, insertNode, deleteNode };
 };
 
 function buildTree(arr, start, end) {
@@ -87,5 +117,8 @@ let ana = mergeSort([8, 43, 2, 6, 8, 34, 1, 8, 11, 6]);
 console.log(ana);
 let anaTree = Tree(ana);
 console.log(prettyPrint(anaTree.root));
-anaTree.insert(5);
+anaTree.insertNode(5);
+console.log(prettyPrint(anaTree.root));
+anaTree.deleteNode(34);
+
 console.log(prettyPrint(anaTree.root));
