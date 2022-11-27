@@ -68,12 +68,13 @@ const Tree = (arr) => {
       node = node.right;
       findNode(num, node);
     }
+
     return node;
   };
 
   const height = (node = root) => {
-    if (root === null) {
-      return null;
+    if (node === null) {
+      return 0;
     }
     return (
       1 +
@@ -84,7 +85,32 @@ const Tree = (arr) => {
     );
   };
 
-  return { root, insertNode, deleteNode, findNode, height };
+  const depth = (num, node = root) => {
+    if (num < node.data) {
+      return 1 + depth(num, node.left);
+    } else if (num > node.data) {
+      return 1 + depth(num, node.right);
+    } else {
+      return 0;
+    }
+  };
+
+  const isBalanced = (node = root) => {
+    if (node.left === null || node.right === null) {
+      if (Math.abs(height(node.left) - height(node.right)) <= 1) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    if (Math.abs(height(node.left) - height(node.right)) <= 1) {
+      return true * isBalanced(node.left) * isBalanced(node.right);
+    } else {
+      return false;
+    }
+  };
+
+  return { root, insertNode, deleteNode, findNode, height, depth, isBalanced };
 };
 
 function buildTree(arr, start, end) {
@@ -142,11 +168,14 @@ let ana = mergeSort([8, 43, 2, 6, 8, 34, 1, 8, 11, 6]);
 console.log(ana);
 let anaTree = Tree(ana);
 prettyPrint(anaTree.root);
-anaTree.insertNode(5);
 prettyPrint(anaTree.root);
-anaTree.deleteNode(6);
 prettyPrint(anaTree.root);
 prettyPrint(anaTree.findNode(2));
 anaTree.insertNode(22);
 prettyPrint(anaTree.root);
+
 console.log(anaTree.height());
+console.log(anaTree.depth(11));
+anaTree.deleteNode(2);
+prettyPrint(anaTree.root);
+console.log(anaTree.isBalanced());
